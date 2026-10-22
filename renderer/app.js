@@ -86,6 +86,18 @@ function wireSegments() {
   });
   const segVal = (id) => document.querySelector('#' + id + ' button.active').dataset.v;
   window._segVal = segVal;
+
+  // Tampilkan input manual saat pilihan "Kustom" dipilih
+  $('seg-duration').addEventListener('click', () => {
+    const v = segVal('seg-duration');
+    $('row-duration-custom').style.display = v === 'custom' ? 'flex' : 'none';
+    if (v === 'custom') $('inp-duration').focus();
+  });
+  $('seg-count').addEventListener('click', () => {
+    const v = segVal('seg-count');
+    $('row-count-custom').style.display = v === 'custom' ? 'flex' : 'none';
+    if (v === 'custom') $('inp-count').focus();
+  });
 }
 
 /* ---------- Buttons ---------- */
@@ -159,8 +171,8 @@ function wireButtons() {
 /* ---------- Models ---------- */
 async function refreshModels() {
   const s = await window.api.modelsStatus();
-  setModelUI('tiny', s.tiny);
   setModelUI('asr', s.asr);
+  setModelUI('small', s.small);
   setModelUI('llm', s.llm);
 }
 
@@ -199,8 +211,8 @@ async function downloadModels() {
   btn.disabled = false;
   btn.textContent = 'Download Model AI (sekali saja)';
   if (r.ok) {
-    setModelUI('tiny', r.tiny);
     setModelUI('asr', r.asr);
+    setModelUI('small', r.small);
     setModelUI('llm', r.llm);
     setStatus('Model AI siap! Aplikasi kini 100% offline.');
     appendLog('Semua model AI siap dipakai offline.');
@@ -212,20 +224,24 @@ async function downloadModels() {
 
 /* ---------- Job ---------- */
 function buildCfg() {
+  const durSel = window._segVal('seg-duration');
+  const cntSel = window._segVal('seg-count');
   return {
     sourceType: state.sourceType,
     url: ($('inp-url').value || '').trim(),
     filePath: state.filePath,
     outputDir: state.outputDir,
-    clipDuration: parseInt(window._segVal('seg-duration'), 10),
-    clipCount: parseInt(window._segVal('seg-count'), 10),
+    clipDuration: durSel === 'custom' ? parseInt($('inp-duration').value, 10) : parseInt(durSel, 10),
+    clipCount: cntSel === 'custom' ? parseInt($('inp-count').value, 10) : parseInt(cntSel, 10),
     format: window._segVal('seg-format'),
     subtitleStyle: window._segVal('seg-subtitle'),
+    subtitlePosition: window._segVal('seg-position'),
+    asrLanguage: window._segVal('seg-lang'),
     watermarkPath: $('chk-wm').checked ? state.watermarkPath : null,
     musicPath: $('chk-music').checked ? state.musicPath : null,
     musicVolume: parseInt($('rng-music').value, 10) / 100,
     hookSfx: $('chk-sfx').checked,
-    asrModel: window._segVal('seg-speed') === 'accurate' ? 'Xenova/whisper-base' : 'Xenova/whisper-tiny',
+    asrModel: window._segVal('seg-speed') === 'accurate' ? 'Xenova/whisper-small' : 'Xenova/whisper-base',
     maxAnalysisMin: parseInt(window._segVal('seg-analysis'), 10)
   };
 }
@@ -250,6 +266,14 @@ async function startJob() {
   }
   if (cfg.sourceType === 'url' && !/^https?:\/\//i.test(cfg.url)) {
     setStatus('URL tidak valid. Harus dimulai dengan http/https.');
+    return;
+  }
+  if (!Number.isFinite(cfg.clipDuration) || cfg.clipDuration < 10 || cfg.clipDuration > 1800) {
+    setStatus('Durasi klip kustom harus diisi antara 10 sampai 1800 detik.');
+    return;
+  }
+  if (!Number.isFinite(cfg.clipCount) || cfg.clipCount < 1 || cfg.clipCount > 30) {
+    setStatus('Jumlah klip kustom harus diisi antara 1 sampai 30.');
     return;
   }
   state.running = true;
@@ -306,7 +330,8 @@ function handleEvent(data) {
     case 'model-progress': {
       if (data.status === 'progress' && data.total) {
         const pct = (data.loaded / data.total) * 100;
-        const key = data.model === 'llm' ? 'llm' : (data.model === 'tiny' ? 'tiny' : 'asr');
+        const validKeys = ['llm', 'small', 'asr', 'tiny'];
+        const key = validKeys.includes(data.model) ? data.model : 'asr';
         const bar = $('bar-' + key);
         if (bar) bar.style.width = pct.toFixed(1) + '%';
         $('status-' + key).textContent =

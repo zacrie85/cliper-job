@@ -51,9 +51,13 @@
 
           <label class="field-label">Durasi tiap klip</label>
           <div class="seg" id="seg-duration">
-            <button data-v="15">15 detik</button>
-            <button data-v="30" class="active">30 detik</button>
-            <button data-v="60">60 detik</button>
+            <button data-v="15">15 dtk</button>
+            <button data-v="30" class="active">30 dtk</button>
+            <button data-v="60">60 dtk</button>
+            <button data-v="custom">Kustom</button>
+          </div>
+          <div class="row" id="row-duration-custom" style="display:none; margin-top:8px">
+            <input id="inp-duration" type="number" class="input" min="10" max="1800" step="1" placeholder="Detik per klip, mis. 90 (10-1800)" />
           </div>
 
           <label class="field-label">Jumlah klip</label>
@@ -62,6 +66,10 @@
             <button data-v="3" class="active">3</button>
             <button data-v="4">4</button>
             <button data-v="5">5</button>
+            <button data-v="custom">Kustom</button>
+          </div>
+          <div class="row" id="row-count-custom" style="display:none; margin-top:8px">
+            <input id="inp-count" type="number" class="input" min="1" max="30" step="1" placeholder="Jumlah klip, mis. 8 (1-30)" />
           </div>
 
           <label class="field-label">Format frame</label>
@@ -78,6 +86,21 @@
             <button data-v="karaoke">Karaoke</button>
             <button data-v="none">Tanpa Subtitle</button>
           </div>
+
+          <label class="field-label">Posisi subtitle</label>
+          <div class="seg" id="seg-position">
+            <button data-v="top">Atas</button>
+            <button data-v="center" class="active">Tengah</button>
+            <button data-v="bottom">Bawah</button>
+          </div>
+
+          <label class="field-label">Bahasa ucapan di video</label>
+          <div class="seg" id="seg-lang">
+            <button data-v="indonesian" class="active">Indonesia</button>
+            <button data-v="english">English</button>
+            <button data-v="auto">Auto</button>
+          </div>
+          <div class="hint">Rekomendasi: Indonesia - AI fokus Bahasa Indonesia (resmi &amp; slang), kata English tetap ditulis. Auto bisa kurang stabil, pakai hanya jika video full English/Indonesia tak jelas.</div>
 
           <div class="row toggles">
             <label class="switch-row">
@@ -109,10 +132,10 @@
             </label>
           </div>
 
-          <label class="field-label" style="margin-top:14px">Kecepatan transkripsi AI</label>
+          <label class="field-label" style="margin-top:14px">Akurasi transkripsi AI</label>
           <div class="seg" id="seg-speed">
-            <button data-v="fast" class="active">Cepat (rekomendasi)</button>
-            <button data-v="accurate">Akurat</button>
+            <button data-v="fast">Cepat (Base)</button>
+            <button data-v="accurate" class="active">Sangat Akurat (rekomendasi)</button>
           </div>
 
           <label class="field-label" style="margin-top:14px">Analisis AI maksimal (menit pertama)</label>
@@ -132,17 +155,17 @@
           <h2 class="card-title"><span class="step-num">3</span> Model AI Lokal <span class="chip">sekali download, offline selamanya</span></h2>
           <div class="model-row">
             <div class="model-info">
-              <div class="model-name">Whisper Tiny <span class="model-role">- transkripsi cepat (paralel)</span></div>
-              <div class="model-status" id="status-tiny">memeriksa...</div>
-            </div>
-            <div class="model-bar"><div class="model-bar-fill" id="bar-tiny"></div></div>
-          </div>
-          <div class="model-row">
-            <div class="model-info">
-              <div class="model-name">Whisper Base <span class="model-role">- transkripsi akurat (opsional)</span></div>
+              <div class="model-name">Whisper Base <span class="model-role">- transkripsi cepat</span></div>
               <div class="model-status" id="status-asr">memeriksa...</div>
             </div>
             <div class="model-bar"><div class="model-bar-fill" id="bar-asr"></div></div>
+          </div>
+          <div class="model-row">
+            <div class="model-info">
+              <div class="model-name">Whisper Small <span class="model-role">- paling akurat: Bahasa Indonesia &amp; English</span></div>
+              <div class="model-status" id="status-small">memeriksa...</div>
+            </div>
+            <div class="model-bar"><div class="model-bar-fill" id="bar-small"></div></div>
           </div>
           <div class="model-row">
             <div class="model-info">
