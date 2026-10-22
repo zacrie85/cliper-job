@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   pickFolder: () => ipcRenderer.invoke('dialog:folder'),
   openPath: (p) => ipcRenderer.invoke('shell:openPath', p),
   showItem: (p) => ipcRenderer.invoke('shell:showItem', p),
+  statFile: (p) => ipcRenderer.invoke('fs:stat', p),
   appInfo: () => ipcRenderer.invoke('app:info'),
   modelsStatus: () => ipcRenderer.invoke('models:status'),
   modelsDownload: () => ipcRenderer.invoke('models:download'),

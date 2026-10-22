@@ -1,7 +1,7 @@
 {
-  "name": "cheat-clip-pro-offline",
-  "productName": "Cheat Clip Pro Offline",
-  "version": "1.0.0",
+  "name": "cliper-job",
+  "productName": "CLIPER JOB",
+  "version": "1.1.0",
   "description": "AI Auto Clipper 100% OFFLINE - potong video panjang menjadi klip viral TikTok/Shorts/Reels dengan subtitle karaoke animasi, tanpa API key",
   "main": "main.js",
   "author": "zacrie85",
@@ -25,8 +25,8 @@
     "electron-builder": "24.13.3"
   },
   "build": {
-    "appId": "io.github.zacrie85.cheatclippro.offline",
-    "productName": "Cheat Clip Pro Offline",
+    "appId": "io.github.zacrie85.cliperjob",
+    "productName": "CLIPER JOB",
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -67,8 +67,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "runAfterFinish": true,
-      "shortcutName": "Cheat Clip Pro Offline",
-      "artifactName": "Cheat-Clip-Pro-Offline-Setup-${version}.exe"
+      "shortcutName": "CLIPER JOB",
+      "artifactName": "CLIPER-JOB-Setup-${version}.exe"
     }
   }
 }

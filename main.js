@@ -1,12 +1,12 @@
 /*
- * Cheat Clip Pro Offline - Main Process
+ * CLIPER JOB - Main Process
  * AI Auto Clipper 100% offline untuk Windows
  */
 const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
-app.setName('cheat-clip-pro-offline');
+app.setName('cliper-job');
 
 let win = null;
 let jobCancelFlag = false;
@@ -35,7 +35,7 @@ function createWindow() {
     minHeight: 660,
     backgroundColor: '#0b0e17',
     autoHideMenuBar: true,
-    title: 'Cheat Clip Pro Offline',
+    title: 'CLIPER JOB',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -103,13 +103,31 @@ function getBinPaths() {
 
 /* ---------------- IPC: dialog & shell ---------------- */
 ipcMain.handle('dialog:file', async (e, kind) => {
-  const filters = kind === 'video'
-    ? [{ name: 'Video', extensions: ['mp4', 'mkv', 'webm', 'mov', 'avi', 'm4v'] }]
-    : kind === 'audio'
-      ? [{ name: 'Audio', extensions: ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac'] }]
-      : [{ name: 'Gambar', extensions: ['png', 'jpg', 'jpeg', 'webp'] }];
-  const r = await dialog.showOpenDialog(win, { properties: ['openFile'], filters });
-  return r.canceled ? null : r.filePaths[0];
+  try {
+    const VIDEO_EXT = ['mp4', 'mkv', 'webm', 'mov', 'avi', 'm4v', 'wmv', 'flv', 'mpg', 'mpeg', 'ts', 'mts', 'm2ts', '3gp', 'vob', 'ogv', 'gif'];
+    const filters = kind === 'video'
+      ? [
+          { name: 'Video', extensions: VIDEO_EXT },
+          { name: 'Semua File', extensions: ['*'] }
+        ]
+      : kind === 'audio'
+        ? [
+            { name: 'Audio', extensions: ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac', 'opus', 'wma'] },
+            { name: 'Semua File', extensions: ['*'] }
+          ]
+        : [{ name: 'Gambar', extensions: ['png', 'jpg', 'jpeg', 'webp', 'bmp'] }];
+    const parentWin = BrowserWindow.fromWebContents(e.sender) || win;
+    const opts = { properties: ['openFile'], filters };
+    const r = parentWin
+      ? await dialog.showOpenDialog(parentWin, opts)
+      : await dialog.showOpenDialog(opts);
+    if (r.canceled || !r.filePaths || !r.filePaths.length) return null;
+    return r.filePaths[0];
+  } catch (err) {
+    console.error('dialog:file error:', err);
+    sendEvt('log', { message: 'Gagal membuka dialog file: ' + String(err && err.message || err) });
+    return null;
+  }
 });
 
 ipcMain.handle('dialog:folder', async () => {
@@ -119,6 +137,15 @@ ipcMain.handle('dialog:folder', async () => {
 
 ipcMain.handle('shell:openPath', async (e, p) => shell.openPath(p));
 ipcMain.handle('shell:showItem', async (e, p) => shell.showItemInFolder(p));
+
+ipcMain.handle('fs:stat', async (e, p) => {
+  try {
+    const st = fs.statSync(p);
+    return { exists: true, size: st.size, isFile: st.isFile() };
+  } catch (err) {
+    return { exists: false, size: 0, isFile: false };
+  }
+});
 
 ipcMain.handle('app:info', async () => {
   return {
@@ -132,10 +159,10 @@ ipcMain.handle('app:info', async () => {
 function getDefaultOutput() {
   try {
     const vid = app.getPath('videos');
-    return path.join(vid, 'Cheat Clip Pro');
+    return path.join(vid, 'CLIPER JOB');
   } catch (err) {
-    try { return path.join(app.getPath('documents'), 'Cheat Clip Pro'); }
-    catch (e2) { return path.join(app.getPath('home'), 'Cheat Clip Pro'); }
+    try { return path.join(app.getPath('documents'), 'CLIPER JOB'); }
+    catch (e2) { return path.join(app.getPath('home'), 'CLIPER JOB'); }
   }
 }
 

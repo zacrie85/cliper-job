@@ -1,4 +1,4 @@
-/* Cheat Clip Pro Offline - Renderer logic */
+/* CLIPER JOB - Renderer logic */
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -23,6 +23,7 @@ const STAGES = [
 window.addEventListener('DOMContentLoaded', async () => {
   wireSegments();
   wireButtons();
+  wireDragDrop();
   const info = await window.api.appInfo();
   state.outputDir = info.outputDir;
   $('inp-output').value = info.outputDir;
@@ -30,6 +31,48 @@ window.addEventListener('DOMContentLoaded', async () => {
   refreshModels();
   window.api.on(handleEvent);
 });
+
+/* ---------- Drag & drop video/audio/gambar ke jendela ---------- */
+function wireDragDrop() {
+  const extVideo = ['mp4', 'mkv', 'webm', 'mov', 'avi', 'm4v', 'wmv', 'flv', 'mpg', 'mpeg', 'ts', 'mts', 'm2ts', '3gp', 'vob', 'ogv'];
+  const extAudio = ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac', 'opus', 'wma'];
+  const extImage = ['png', 'jpg', 'jpeg', 'webp', 'bmp'];
+  const extOf = (p) => (p.split('.').pop() || '').toLowerCase();
+  const prevent = (e) => { e.preventDefault(); e.stopPropagation(); };
+  document.addEventListener('dragover', prevent);
+  document.addEventListener('dragenter', prevent);
+  document.addEventListener('drop', (e) => {
+    prevent();
+    const files = Array.from((e.dataTransfer && e.dataTransfer.files) || []);
+    if (!files.length) return;
+    for (const f of files) {
+      const ext = extOf(f.name);
+      if (extVideo.includes(ext)) { setVideoFile(f.path, f.size); return; }
+    }
+    for (const f of files) {
+      const ext = extOf(f.name);
+      if (extAudio.includes(ext)) {
+        state.musicPath = f.path;
+        $('chk-music').checked = true;
+        $('music-hint').textContent = 'Musik: ' + f.path;
+        $('music-vol-row').style.display = 'flex';
+        setStatus('Musik latar ditambahkan dari file yang di-drop.');
+        return;
+      }
+    }
+    for (const f of files) {
+      const ext = extOf(f.name);
+      if (extImage.includes(ext)) {
+        state.watermarkPath = f.path;
+        $('chk-wm').checked = true;
+        $('wm-hint').textContent = 'Watermark: ' + f.path;
+        setStatus('Watermark diatur dari gambar yang di-drop.');
+        return;
+      }
+    }
+    setStatus('Format file tidak dikenali. Gunakan video (mp4/mkv/webm/mov/avi...), audio, atau gambar.');
+  });
+}
 
 /* ---------- Segmented controls ---------- */
 function wireSegments() {
@@ -46,14 +89,33 @@ function wireSegments() {
 }
 
 /* ---------- Buttons ---------- */
+async function setVideoFile(p, sizeBytes) {
+  try {
+    const st = await window.api.statFile(p);
+    if (!st || !st.exists || !st.isFile) {
+      setStatus('File tidak ditemukan: ' + p);
+      return;
+    }
+    state.sourceType = 'file';
+    state.filePath = p;
+    const size = sizeBytes || st.size || 0;
+    $('picked-file-hint').textContent = 'File video siap: ' + p + ' (' + fmtSize(size) + ')';
+    $('inp-url').value = '';
+    setStatus('Video siap diproses! Klik BUAT KLIP SEKARANG.');
+  } catch (err) {
+    setStatus('Gagal memuat file: ' + String(err && err.message || err));
+  }
+}
+
 function wireButtons() {
   $('btn-pick-video').addEventListener('click', async () => {
-    const p = await window.api.pickFile('video');
-    if (p) {
-      state.sourceType = 'file';
-      state.filePath = p;
-      $('picked-file-hint').textContent = 'File dipilih: ' + p;
-      $('inp-url').value = '';
+    try {
+      setStatus('Membuka dialog pilih file...');
+      const p = await window.api.pickFile('video');
+      if (p) await setVideoFile(p);
+      else setStatus('Pilih file dibatalkan, atau tempel URL video di kolom atas.');
+    } catch (err) {
+      setStatus('Gagal membuka dialog file: ' + String(err && err.message || err));
     }
   });
   $('inp-url').addEventListener('input', () => {
@@ -168,6 +230,17 @@ function buildCfg() {
 async function startJob() {
   if (state.running) return;
   const cfg = buildCfg();
+  if (cfg.sourceType === 'file' && !cfg.filePath) {
+    setStatus('Pilih file video dulu, atau tempel URL video.');
+    return;
+  }
+  if (cfg.sourceType === 'file' && cfg.filePath) {
+    const st = await window.api.statFile(cfg.filePath);
+    if (!st || !st.exists) {
+      setStatus('File video tidak ditemukan, pilih ulang filenya.');
+      return;
+    }
+  }
   if (cfg.sourceType === 'url' && !cfg.url) {
     setStatus('Tempel URL video dulu atau pilih file video.');
     return;

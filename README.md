@@ -1,4 +1,4 @@
-# Cheat Clip Pro Offline
+# CLIPER JOB
 
 **AI Auto Clipper 100% OFFLINE untuk Windows** — ubah video YouTube / Google Drive / video lokal menjadi klip viral TikTok / Shorts / Reels dengan subtitle karaoke animasi, tanpa API key, tanpa langganan, tanpa mengirim data ke cloud.
 
@@ -8,7 +8,7 @@
 
 ## Perbedaan dengan Versi Asli
 
-| | Cheat Clip Pro (asli) | Cheat Clip Pro Offline (ini) |
+| | Cheat Clip Pro (asli) | CLIPER JOB (ini) |
 |---|---|---|
 | AI | Google Gemini API (online, perlu API key) | **Whisper + Qwen 1.5 lokal** (offline) |
 | Koneksi internet | Wajib saat dipakai | Hanya untuk download video & sekali download model AI |
@@ -19,7 +19,7 @@
 
 ## Download & Instalasi
 
-1. Buka halaman [**Releases**](../../releases) dan download `Cheat-Clip-Pro-Offline-Setup-1.0.0.exe`
+1. Buka halaman [**Releases**](../../releases) dan download `CLIPER-JOB-Setup-1.1.0.exe`
 2. Jalankan installer. Jika muncul peringatan **Windows SmartScreen** (karena aplikasi tidak ditandatangani secara digital):
    - Klik **More info** → **Run anyway**
 3. Selesai! Aplikasi terpasang dengan shortcut di desktop.
@@ -33,7 +33,7 @@ Saat pertama kali dibuka, klik tombol **"Download Model AI"** di aplikasi:
 | Whisper Base (ONNX) | Suara → teks + timestamp per kata | ± 80 MB |
 | Qwen 1.5 0.5B Chat (ONNX) | Analisis & pilih momen paling viral | ± 490 MB |
 
-Setelah terunduh (tersimpan di `%APPDATA%\cheat-clip-pro-offline\models`), aplikasi **tidak butuh internet lagi selamanya** — transkripsi dan analisis 100% di PC kamu.
+Setelah terunduh (tersimpan di `%APPDATA%\cliper-job\models`), aplikasi **tidak butuh internet lagi selamanya** — transkripsi dan analisis 100% di PC kamu.
 
 ## Cara Pakai
 
@@ -117,3 +117,14 @@ Gunakan hanya untuk video **milik sendiri** atau video yang **memiliki izin** un
 ## Lisensi
 
 MIT — lihat [LICENSE](LICENSE).
+
+## Riwayat Versi
+
+### v1.1.0 — CLIPER JOB
+- **Aplikasi berganti nama menjadi CLIPER JOB** (sebelumnya Cheat Clip Pro Offline)
+- **Perbaikan penting:** gagal download model AI (`require() of ES Module ... not supported`) — library AI kini dimuat lewat dynamic `import()` ESM dan berjalan di semua kondisi
+- **Perbaikan:** import file video kini lebih andal — format didukung diperluas (wmv, flv, mpg, ts, 3gp, dll) + tombol "Semua File", validasi file, dan pesan kesalahan yang jelas
+- **Fitur baru:** drag & drop file video/musik/watermark langsung ke jendela aplikasi
+
+### v1.0.0 — Cheat Clip Pro Offline
+- Rilis perdana: AI Auto Clipper 100% offline (Whisper + Qwen lokal, FFmpeg, yt-dlp)
