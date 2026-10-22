@@ -1,0 +1,14 @@
+node_modules/
+release/
+dist/
+tmp/
+.cache/
+*.log
+.DS_Store
+gh_user.json
+gh_headers.txt
+# Binary besar di-download lewat scripts/fetch-binaries.sh
+resources/bin/ffmpeg.exe
+resources/bin/ffprobe.exe
+resources/bin/yt-dlp.exe
+resources/fonts/*.ttf
