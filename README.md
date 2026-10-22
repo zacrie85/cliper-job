@@ -19,7 +19,7 @@
 
 ## Download & Instalasi
 
-1. Buka halaman [**Releases**](../../releases) dan download `CLIPER-JOB-Setup-1.1.0.exe`
+1. Buka halaman [**Releases**](../../releases) dan download `CLIPER-JOB-Setup-1.2.0.exe`
 2. Jalankan installer. Jika muncul peringatan **Windows SmartScreen** (karena aplikasi tidak ditandatangani secara digital):
    - Klik **More info** → **Run anyway**
 3. Selesai! Aplikasi terpasang dengan shortcut di desktop.
@@ -119,6 +119,11 @@ Gunakan hanya untuk video **milik sendiri** atau video yang **memiliki izin** un
 MIT — lihat [LICENSE](LICENSE).
 
 ## Riwayat Versi
+
+### v1.2.0 — Perbaikan total loader AI
+- **FIX: "Cannot find package '@huggingface/jinja'"** — semua dependency library AI (jinja, onnxruntime-node/web, sharp) kini diikutkan secara utuh ke dalam installer; arsip asar dimatikan sepenuhnya agar resolusi modul Node 100% standar, tanpa kejutan
+- Binary sharp Windows (`@img/sharp-win32-x64`) ikut ter-pack, plus binding native onnxruntime win32 terverifikasi
+- Seluruh jalur diuji dari pohon file ter-pack: import transformers.js, transkripsi Whisper, dan worker LLM — semua lulus
 
 ### v1.1.0 — CLIPER JOB
 - **Aplikasi berganti nama menjadi CLIPER JOB** (sebelumnya Cheat Clip Pro Offline)

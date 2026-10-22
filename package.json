@@ -1,7 +1,7 @@
 {
   "name": "cliper-job",
   "productName": "CLIPER JOB",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "AI Auto Clipper 100% OFFLINE - potong video panjang menjadi klip viral TikTok/Shorts/Reels dengan subtitle karaoke animasi, tanpa API key",
   "main": "main.js",
   "author": "zacrie85",
@@ -36,24 +36,14 @@
       "preload.js",
       "lib/**/*",
       "renderer/**/*",
-      "package.json",
-      "!**/node_modules/sharp/**",
-      "!**/node_modules/@img/**",
-      "!**/node_modules/onnxruntime-web/**"
+      "package.json"
     ],
     "extraResources": [
       { "from": "resources/bin", "to": "bin" },
       { "from": "resources/fonts", "to": "fonts" },
       { "from": "assets", "to": "assets" }
     ],
-    "asarUnpack": [
-      "**/node_modules/onnxruntime-node/**",
-      "**/node_modules/onnxruntime-common/**",
-      "**/node_modules/sharp/**",
-      "**/node_modules/@img/**",
-      "**/node_modules/wavefile/**",
-      "**/node_modules/@xenova/transformers/**"
-    ],
+    "asar": false,
     "win": {
       "target": [
         { "target": "nsis", "arch": ["x64"] }
