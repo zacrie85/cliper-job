@@ -159,6 +159,7 @@ function wireButtons() {
 /* ---------- Models ---------- */
 async function refreshModels() {
   const s = await window.api.modelsStatus();
+  setModelUI('tiny', s.tiny);
   setModelUI('asr', s.asr);
   setModelUI('llm', s.llm);
 }
@@ -198,6 +199,7 @@ async function downloadModels() {
   btn.disabled = false;
   btn.textContent = 'Download Model AI (sekali saja)';
   if (r.ok) {
+    setModelUI('tiny', r.tiny);
     setModelUI('asr', r.asr);
     setModelUI('llm', r.llm);
     setStatus('Model AI siap! Aplikasi kini 100% offline.');
@@ -223,6 +225,7 @@ function buildCfg() {
     musicPath: $('chk-music').checked ? state.musicPath : null,
     musicVolume: parseInt($('rng-music').value, 10) / 100,
     hookSfx: $('chk-sfx').checked,
+    asrModel: window._segVal('seg-speed') === 'accurate' ? 'Xenova/whisper-base' : 'Xenova/whisper-tiny',
     maxAnalysisMin: parseInt(window._segVal('seg-analysis'), 10)
   };
 }
@@ -303,7 +306,7 @@ function handleEvent(data) {
     case 'model-progress': {
       if (data.status === 'progress' && data.total) {
         const pct = (data.loaded / data.total) * 100;
-        const key = data.model === 'llm' ? 'llm' : 'asr';
+        const key = data.model === 'llm' ? 'llm' : (data.model === 'tiny' ? 'tiny' : 'asr');
         const bar = $('bar-' + key);
         if (bar) bar.style.width = pct.toFixed(1) + '%';
         $('status-' + key).textContent =

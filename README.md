@@ -19,7 +19,7 @@
 
 ## Download & Instalasi
 
-1. Buka halaman [**Releases**](../../releases) dan download `CLIPER-JOB-Setup-1.2.0.exe`
+1. Buka halaman [**Releases**](../../releases) dan download `CLIPER-JOB-Setup-1.3.0.exe`
 2. Jalankan installer. Jika muncul peringatan **Windows SmartScreen** (karena aplikasi tidak ditandatangani secara digital):
    - Klik **More info** → **Run anyway**
 3. Selesai! Aplikasi terpasang dengan shortcut di desktop.
@@ -119,6 +119,17 @@ Gunakan hanya untuk video **milik sendiri** atau video yang **memiliki izin** un
 MIT — lihat [LICENSE](LICENSE).
 
 ## Riwayat Versi
+
+### v1.3.0 — Fix render + transkripsi jauh lebih cepat
+- **FIX: "Unrecognized option filter_complex_script"** pada proses Merender Klip — ffmpeg baru (8+) menghapus opsi lama itu; kini filter graph dikirim langsung sebagai argumen (didukung semua versi ffmpeg) dengan fallback otomatis untuk ffmpeg lama
+- **Transkripsi AI jauh lebih cepat:**
+  - Pilihan baru "Kecepatan transkripsi AI": **Cepat** (Whisper Tiny, default) / **Akurat** (Whisper Base)
+  - **Paralel**: beberapa bagian audio diproses bersamaan sesuai jumlah core CPU
+  - **Bagian sunyi/hening di-skip** tanpa diproses AI (video banyak jeda/sunyi bisa puluhan kali lebih cepat)
+  - Timestamp level segmen (tanpa DTW per kata yang berat) + pembagian kata proporsional untuk subtitle karaoke
+  - Anti-halusinasi berulang (`no_repeat_ngram_size`) — subtitle lebih bersih & tidak memakan waktu
+  - Benchmark suara asli: **3.5x lebih cepat** dengan 1 worker; di PC 4-8 core total bisa **7-15x** (plus skip sunyi)
+- Panel Model AI kini menampilkan 3 model: Whisper Tiny, Whisper Base, Qwen
 
 ### v1.2.0 — Perbaikan total loader AI
 - **FIX: "Cannot find package '@huggingface/jinja'"** — semua dependency library AI (jinja, onnxruntime-node/web, sharp) kini diikutkan secara utuh ke dalam installer; arsip asar dimatikan sepenuhnya agar resolusi modul Node 100% standar, tanpa kejutan

@@ -109,6 +109,12 @@
             </label>
           </div>
 
+          <label class="field-label" style="margin-top:14px">Kecepatan transkripsi AI</label>
+          <div class="seg" id="seg-speed">
+            <button data-v="fast" class="active">Cepat (rekomendasi)</button>
+            <button data-v="accurate">Akurat</button>
+          </div>
+
           <label class="field-label" style="margin-top:14px">Analisis AI maksimal (menit pertama)</label>
           <div class="seg" id="seg-analysis">
             <button data-v="10">10</button>
@@ -126,7 +132,14 @@
           <h2 class="card-title"><span class="step-num">3</span> Model AI Lokal <span class="chip">sekali download, offline selamanya</span></h2>
           <div class="model-row">
             <div class="model-info">
-              <div class="model-name">Whisper Base <span class="model-role">- suara ke teks (transkrip)</span></div>
+              <div class="model-name">Whisper Tiny <span class="model-role">- transkripsi cepat (paralel)</span></div>
+              <div class="model-status" id="status-tiny">memeriksa...</div>
+            </div>
+            <div class="model-bar"><div class="model-bar-fill" id="bar-tiny"></div></div>
+          </div>
+          <div class="model-row">
+            <div class="model-info">
+              <div class="model-name">Whisper Base <span class="model-role">- transkripsi akurat (opsional)</span></div>
               <div class="model-status" id="status-asr">memeriksa...</div>
             </div>
             <div class="model-bar"><div class="model-bar-fill" id="bar-asr"></div></div>

@@ -13,6 +13,7 @@ let jobCancelFlag = false;
 let activeChildren = [];
 
 const MODELS = {
+  tiny: 'Xenova/whisper-tiny',
   asr: 'Xenova/whisper-base',
   llm: 'Xenova/Qwen1.5-0.5B-Chat'
 };
@@ -189,6 +190,7 @@ ipcMain.handle('models:status', async () => {
   const dir = modelsDir();
   return {
     dir,
+    tiny: modelStatusOne(dir, 'Xenova', 'whisper-tiny'),
     asr: modelStatusOne(dir, 'Xenova', 'whisper-base'),
     llm: modelStatusOne(dir, 'Xenova', 'Qwen1.5-0.5B-Chat')
   };
@@ -198,12 +200,14 @@ ipcMain.handle('models:download', async () => {
   try {
     const ai = require('./lib/ai');
     await ai.init(modelsDir(), MODELS);
-    await ai.ensureASR((p) => sendEvt('model-progress', p));
+    await ai.ensureASR(MODELS.tiny, (p) => sendEvt('model-progress', p));
+    await ai.ensureASR(MODELS.asr, (p) => sendEvt('model-progress', p));
     await ai.ensureLLM((p) => sendEvt('model-progress', p));
     sendEvt('models-ready', {});
     const dir = modelsDir();
     return {
       ok: true,
+      tiny: modelStatusOne(dir, 'Xenova', 'whisper-tiny'),
       asr: modelStatusOne(dir, 'Xenova', 'whisper-base'),
       llm: modelStatusOne(dir, 'Xenova', 'Qwen1.5-0.5B-Chat')
     };
