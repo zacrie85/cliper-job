@@ -15,7 +15,8 @@ let activeChildren = [];
 const MODELS = {
   asr: 'Xenova/whisper-base',
   small: 'Xenova/whisper-small',
-  llm: 'Xenova/Qwen1.5-0.5B-Chat'
+  llm: 'Xenova/Qwen1.5-0.5B-Chat',
+  obj: 'Xenova/yolos-tiny'
 };
 
 function modelsDir() {
@@ -192,7 +193,8 @@ ipcMain.handle('models:status', async () => {
     dir,
     asr: modelStatusOne(dir, 'Xenova', 'whisper-base'),
     small: modelStatusOne(dir, 'Xenova', 'whisper-small'),
-    llm: modelStatusOne(dir, 'Xenova', 'Qwen1.5-0.5B-Chat')
+    llm: modelStatusOne(dir, 'Xenova', 'Qwen1.5-0.5B-Chat'),
+    obj: modelStatusOne(dir, 'Xenova', 'yolos-tiny')
   };
 });
 
@@ -204,13 +206,15 @@ ipcMain.handle('models:download', async () => {
     // whisper-small: siapkan lewat proses terpisah supaya RAM aplikasi utama tetap kecil
     await ai.ensureASRReady(MODELS.small, (p) => sendEvt('model-progress', p));
     await ai.ensureLLM((p) => sendEvt('model-progress', p));
+    await ai.ensureObjDetector((p) => sendEvt('model-progress', p));
     sendEvt('models-ready', {});
     const dir = modelsDir();
     return {
       ok: true,
       asr: modelStatusOne(dir, 'Xenova', 'whisper-base'),
       small: modelStatusOne(dir, 'Xenova', 'whisper-small'),
-      llm: modelStatusOne(dir, 'Xenova', 'Qwen1.5-0.5B-Chat')
+      llm: modelStatusOne(dir, 'Xenova', 'Qwen1.5-0.5B-Chat'),
+      obj: modelStatusOne(dir, 'Xenova', 'yolos-tiny')
     };
   } catch (err) {
     return { ok: false, error: String(err && err.message || err) };

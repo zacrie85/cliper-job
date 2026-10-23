@@ -15,7 +15,7 @@
 | Biaya AI | Kuota API / API key | **Gratis selamanya** |
 | Privasi | Transkrip terkirim ke cloud | **Semua diproses di PC sendiri** |
 | Bentuk | Web app (React + Python + Docker) | **Installer .exe untuk Windows** |
-| Face tracking | Ya (Python) | Auto-crop 9:16 (penuh / blur / kotak) — face tracking menyusul |
+| Face tracking | Ya (Python) | **FACE TRACKING v1.6.0 (YOLOS AI)** — crop 9:16 otomatis mengikuti pembicara |
 
 ## Download & Instalasi
 
@@ -31,6 +31,7 @@ Saat pertama kali dibuka, klik tombol **"Download Model AI"** di aplikasi:
 | Model | Fungsi | Ukuran |
 |---|---|---|
 | Whisper Base (ONNX) | Suara → teks + timestamp per kata | ± 80 MB |
+| YOLOS-tiny (ONNX) | Face tracking: deteksi orang & kunci pembicara | ± 27 MB |
 | Qwen 1.5 0.5B Chat (ONNX) | Analisis & pilih momen paling viral | ± 490 MB |
 
 Setelah terunduh (tersimpan di `%APPDATA%\cliper-job\models`), aplikasi **tidak butuh internet lagi selamanya** — transkripsi dan analisis 100% di PC kamu.
@@ -119,6 +120,12 @@ Gunakan hanya untuk video **milik sendiri** atau video yang **memiliki izin** un
 MIT — lihat [LICENSE](LICENSE).
 
 ## Riwayat Versi
+
+### v1.6.0 — Face Tracking + Style Subtitle + BGM + Lebih Cepat
+- **🎯 FACE TRACKING (crop ikut pembicara)** — fitur yang paling diminta! Kini crop 9:16 otomatis MENGIKUTI orang yang sedang bicara (model AI YOLOS-tiny lokal ± 27 MB). Cocok untuk podcast 2+ orang: saat pembicara berganti, crop panning mulus ke dia. Ada toggle on/off; fallback aman ke crop tengah bila tak ada orang terdeteksi.
+- **📝 Subtitle lebih banyak style** — ukuran (Kecil/Normal/Besar) + outline (Tipis/Normal/Tebal/Kotak Hitam semi-transparan), digabung 10 font & warna bebas.
+- **🎵 Musik latar (BGM)** — pustaka 4 musik bawaan aplikasi (Lo-Fi Chill, Upbeat Pop, Cinematic, Soft Ambient — royalty-free) atau file sendiri; **auto-duck**: musik mengecil otomatis saat ada yang bicara; loop + fade in/out otomatis.
+- **⚡ Lebih cepat** — render klip kini PARALEL (2 klip sekaligus); face tracking sangat cepat (optimasi resolusi deteksi 16x lebih cepat, hasil malah lebih akurat).
 
 ### v1.3.0 — Fix render + transkripsi jauh lebih cepat
 - **FIX: "Unrecognized option filter_complex_script"** pada proses Merender Klip — ffmpeg baru (8+) menghapus opsi lama itu; kini filter graph dikirim langsung sebagai argumen (didukung semua versi ffmpeg) dengan fallback otomatis untuk ffmpeg lama

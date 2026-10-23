@@ -1,7 +1,7 @@
 #!/bin/bash
 # Re-download Windows binaries + fonts untuk build CLIPER JOB
 set -e
-cd "$(dirname "$0")/../cheat-clip-pro-offline"
+cd "$(dirname "$0")/.."
 mkdir -p resources/bin resources/fonts tmp
 
 echo "[1/3] yt-dlp.exe ..."
@@ -24,11 +24,28 @@ for n in z.namelist():
 fi
 ls -la resources/bin/
 
-echo "[3/3] Font Poppins ..."
+echo "[3/3] Font subtitle (10 font populer) ..."
 cd resources/fonts
-for w in Regular SemiBold Bold ExtraBold; do
-  if [ ! -f "Poppins-$w.ttf" ]; then
-    curl -sL -o "Poppins-$w.ttf" "https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-$w.ttf"
+declare -A FONTS=(
+  ["Poppins-ExtraBold"]="ofl/poppins/Poppins-ExtraBold.ttf"
+  ["Montserrat-Bold"]="https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Bold.ttf"
+  ["BebasNeue-Regular"]="ofl/bebasneue/BebasNeue-Regular.ttf"
+  ["Anton-Regular"]="ofl/anton/Anton-Regular.ttf"
+  ["ArchivoBlack-Regular"]="ofl/archivoblack/ArchivoBlack-Regular.ttf"
+  ["BarlowCondensed-Bold"]="ofl/barlowcondensed/BarlowCondensed-Bold.ttf"
+  ["LuckiestGuy-Regular"]="apache/luckiestguy/LuckiestGuy-Regular.ttf"
+  ["Bangers-Regular"]="ofl/bangers/Bangers-Regular.ttf"
+  ["TitanOne-Regular"]="ofl/titanone/TitanOne-Regular.ttf"
+  ["LilitaOne-Regular"]="ofl/lilitaone/LilitaOne-Regular.ttf"
+)
+for f in "${!FONTS[@]}"; do
+  if [ ! -f "$f.ttf" ]; then
+    echo "  - $f.ttf"
+    v="${FONTS[$f]}"
+    case "$v" in
+      http*) curl -sL -o "$f.ttf" "$v" ;;
+      *) curl -sL -o "$f.ttf" "https://github.com/google/fonts/raw/main/$v" ;;
+    esac
   fi
 done
 ls -la

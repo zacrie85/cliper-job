@@ -16,7 +16,8 @@ const STAGES = [
   { id: 'audio', label: 'Mengekstrak audio' },
   { id: 'transcribe', label: 'Transkripsi AI (offline)' },
   { id: 'analyze', label: 'Analisis momen viral (offline)' },
-  { id: 'render', label: 'Merender klip' }
+  { id: 'detect', label: 'Face tracking — kunci pembicara (offline)' },
+  { id: 'render', label: 'Merender klip (paralel)' }
 ];
 
 /* ---------- Init ---------- */
@@ -54,9 +55,7 @@ function wireDragDrop() {
       const ext = extOf(f.name);
       if (extAudio.includes(ext)) {
         state.musicPath = f.path;
-        $('chk-music').checked = true;
-        $('music-hint').textContent = 'Musik: ' + f.path;
-        $('music-vol-row').style.display = 'flex';
+        document.querySelector('#seg-musicsrc button[data-v="custom"]').click();
         setStatus('Musik latar ditambahkan dari file yang di-drop.');
         return;
       }
@@ -98,6 +97,18 @@ function wireSegments() {
     const v = segVal('seg-count');
     $('row-count-custom').style.display = v === 'custom' ? 'flex' : 'none';
     if (v === 'custom') $('inp-count').focus();
+  });
+  // Sumber musik (v1.6.0)
+  $('seg-musicsrc').addEventListener('click', () => {
+    const v = segVal('seg-musicsrc');
+    $('music-builtin-row').style.display = v === 'builtin' ? 'block' : 'none';
+    $('music-custom-row').style.display = v === 'custom' ? 'flex' : 'none';
+    const on = v !== 'none';
+    $('music-vol-row').style.display = on ? 'flex' : 'none';
+    $('music-duck-row').style.display = on ? 'flex' : 'none';
+    if (v === 'builtin') $('music-hint').textContent = 'Musik dari pustaka aplikasi — otomatis di-loop & fade.';
+    else if (v === 'custom') $('music-hint').textContent = state.musicPath ? 'Musik: ' + state.musicPath : 'Belum pilih file musik.';
+    else $('music-hint').textContent = '';
   });
 }
 
@@ -164,9 +175,7 @@ function wireButtons() {
     const p = await window.api.pickFile('audio');
     if (p) {
       state.musicPath = p;
-      $('chk-music').checked = true;
       $('music-hint').textContent = 'Musik: ' + p;
-      $('music-vol-row').style.display = 'flex';
     }
   });
   $('rng-music').addEventListener('input', (e) => {
@@ -184,6 +193,7 @@ async function refreshModels() {
   setModelUI('asr', s.asr);
   setModelUI('small', s.small);
   setModelUI('llm', s.llm);
+  setModelUI('obj', s.obj);
 }
 
 function fmtSize(b) {
@@ -224,6 +234,7 @@ async function downloadModels() {
     setModelUI('asr', r.asr);
     setModelUI('small', r.small);
     setModelUI('llm', r.llm);
+    setModelUI('obj', r.obj);
     setStatus('Model AI siap! Aplikasi kini 100% offline.');
     appendLog('Semua model AI siap dipakai offline.');
   } else {
@@ -246,13 +257,19 @@ function buildCfg() {
     format: window._segVal('seg-format'),
     subtitleStyle: window._segVal('seg-subtitle'),
     subtitlePosition: window._segVal('seg-position'),
+    subtitleSize: window._segVal('seg-subsize'),
+    subtitleOutline: window._segVal('seg-suboutline'),
     subtitleColor: ($('inp-color').value || '').trim(),
     subtitleFont: $('sel-font').value,
+    faceTrack: $('chk-face').checked,
     cinematicEffect: window._segVal('seg-effect'),
     asrLanguage: window._segVal('seg-lang'),
     watermarkPath: $('chk-wm').checked ? state.watermarkPath : null,
-    musicPath: $('chk-music').checked ? state.musicPath : null,
+    musicSource: window._segVal('seg-musicsrc'),
+    musicTrack: $('sel-musictag').value,
+    musicPath: state.musicPath,
     musicVolume: parseInt($('rng-music').value, 10) / 100,
+    musicDuck: $('chk-duck').checked,
     hookSfx: $('chk-sfx').checked,
     asrModel: window._segVal('seg-speed') === 'accurate' ? 'Xenova/whisper-small' : 'Xenova/whisper-base',
     maxAnalysisMin: parseInt(window._segVal('seg-analysis'), 10)
@@ -343,7 +360,7 @@ function handleEvent(data) {
     case 'model-progress': {
       if (data.status === 'progress' && data.total) {
         const pct = (data.loaded / data.total) * 100;
-        const validKeys = ['llm', 'small', 'asr', 'tiny'];
+        const validKeys = ['llm', 'small', 'asr', 'tiny', 'obj'];
         const key = validKeys.includes(data.model) ? data.model : 'asr';
         const bar = $('bar-' + key);
         if (bar) bar.style.width = pct.toFixed(1) + '%';
