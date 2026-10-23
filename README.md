@@ -121,6 +121,12 @@ MIT — lihat [LICENSE](LICENSE).
 
 ## Riwayat Versi
 
+### v1.7.0 — Cut Langsung + Caption/Judul Video + Full 9:16 (tanpa bar hitam)
+- **✂️ CUT LANGSUNG (ganti pembicara tanpa pan)** — crop kini DIAM di pembicara, lalu LANGSUNG pindah (jump cut) saat pembicara berganti — tanpa efek "kamera diseret". Pergantian dianggap saat posisi berubah > 35% lebar crop yang bertahan ± 1 detik (anti false-alarm). Pilihan `Pergerakan kamera`: **Cut Langsung** (default) / **Halus (diseret)** untuk perilaku lama.
+- **📝 Caption / judul video** — tulis caption/judul khusus yang tampil sepanjang klip (font tebal kuning viral + outline hitam), posisi bebas: **Atas / Tengah / Bawah**. Bila posisinya sama dengan subtitle, subtitle otomatis digeser agar tidak bertabrakan.
+- **🖼️ FULL 9:16 tanpa bar hitam** — bar hitam (letterbox) bawaan video sumber otomatis dideteksi (cropdetect 40 frame, nilai median) dan dipotong SEBELUM crop face tracking — hasil benar-benar penuh atas-bawah. Video tanpa bar hitam tidak tersentuh (guard anti false-positive).
+- Sintaks & hasil render teruji: cut 2 posisi berbeda ± 1100 px, hasil 1080x1920 penuh, caption terbaca jelas.
+
 ### v1.6.1 — FIX aplikasi gagal buka: "Could not load the sharp module using the win32-x64 runtime"
 - **FIX KRITIS**: installer v1.6.0 kehilangan binary sharp Windows (`@img/sharp-win32-x64`) — npm di Linux otomatis melewati package ber-tag OS Windows saat instalasi, sehingga aplikasi gagal memuat library AI lokal (transformers.js) di PC Windows. Kini ada langkah build `scripts/ensure-winsharp.sh` yang memastikan binary sharp Windows selalu ada sebelum build (download tarball resmi npm registry, cek binding `.node` + `libvips-42.dll`).
 - Tanpa perubahan fitur — semua fitur v1.6.0 tetap sama.

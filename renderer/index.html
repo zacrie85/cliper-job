@@ -88,6 +88,23 @@
           </div>
           <div class="hint">Pembicara otomatis dikunci AI (YOLOS) — crop pindah sendiri saat orang yang bicara berganti (format 9:16 Penuh &amp; 1:1). Model kecil ± 27 MB didownload sekali.</div>
 
+          <label class="field-label">Pergerakan kamera saat pembicara berganti</label>
+          <div class="seg" id="seg-cammotion">
+            <button data-v="snap" class="active">Cut Langsung</button>
+            <button data-v="smooth">Halus (diseret)</button>
+          </div>
+          <div class="hint">Cut Langsung: crop diam di pembicara lalu LANGSUNG pindah ke pembicara baru (tanpa geser kamera) — gaya klip viral. Halus: crop bergeser perlahan seperti kamera diseret.</div>
+
+          <label class="field-label">Caption / judul video (opsional)</label>
+          <input id="inp-caption" type="text" class="input" placeholder="Tulis caption/judul, mis: 3 RAHASIA SUKSES" spellcheck="false" />
+          <label class="field-label" style="margin-top:8px">Posisi caption</label>
+          <div class="seg" id="seg-cappos">
+            <button data-v="top">Atas</button>
+            <button data-v="center" class="active">Tengah</button>
+            <button data-v="bottom">Bawah</button>
+          </div>
+          <div class="hint">Caption tampil sepanjang klip (kuning viral, font tebal). Kosongkan jika tidak dipakai. Kalau posisinya sama dengan subtitle, subtitle otomatis digeser agar tidak bertabrakan.</div>
+
           <label class="field-label">Gaya subtitle</label>
           <div class="seg" id="seg-subtitle">
             <button data-v="pop" class="active">Pop Viral</button>
