@@ -23,6 +23,7 @@ const STAGES = [
 window.addEventListener('DOMContentLoaded', async () => {
   wireSegments();
   wireButtons();
+  wireSwatches();
   wireDragDrop();
   const info = await window.api.appInfo();
   state.outputDir = info.outputDir;
@@ -97,6 +98,15 @@ function wireSegments() {
     const v = segVal('seg-count');
     $('row-count-custom').style.display = v === 'custom' ? 'flex' : 'none';
     if (v === 'custom') $('inp-count').focus();
+  });
+}
+
+/* ---------- Swatch warna subtitle ---------- */
+function wireSwatches() {
+  document.querySelectorAll('.swatch').forEach((b) => {
+    b.addEventListener('click', () => {
+      $('inp-color').value = b.dataset.c;
+    });
   });
 }
 
@@ -236,6 +246,9 @@ function buildCfg() {
     format: window._segVal('seg-format'),
     subtitleStyle: window._segVal('seg-subtitle'),
     subtitlePosition: window._segVal('seg-position'),
+    subtitleColor: ($('inp-color').value || '').trim(),
+    subtitleFont: $('sel-font').value,
+    cinematicEffect: window._segVal('seg-effect'),
     asrLanguage: window._segVal('seg-lang'),
     watermarkPath: $('chk-wm').checked ? state.watermarkPath : null,
     musicPath: $('chk-music').checked ? state.musicPath : null,

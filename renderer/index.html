@@ -94,6 +94,47 @@
             <button data-v="bottom">Bawah</button>
           </div>
 
+          <label class="field-label">Warna subtitle</label>
+          <div class="row" style="align-items:center; gap:10px">
+            <input type="color" id="inp-color" value="#FFFFFF" class="input-color" title="Pilih warna subtitle" />
+            <div class="swatches" id="color-swatches">
+              <button class="swatch" data-c="#FFFFFF" style="background:#FFFFFF" title="Putih"></button>
+              <button class="swatch" data-c="#FFD400" style="background:#FFD400" title="Kuning viral"></button>
+              <button class="swatch" data-c="#00E676" style="background:#00E676" title="Hijau neon"></button>
+              <button class="swatch" data-c="#FF3D71" style="background:#FF3D71" title="Merah muda"></button>
+              <button class="swatch" data-c="#40C4FF" style="background:#40C4FF" title="Biru muda"></button>
+              <button class="swatch" data-c="#FF6D00" style="background:#FF6D00" title="Oranye"></button>
+              <button class="swatch" data-c="#B388FF" style="background:#B388FF" title="Ungu"></button>
+              <button class="swatch" data-c="#00E5FF" style="background:#00E5FF" title="Cyan"></button>
+            </div>
+          </div>
+          <div class="hint">Kata penting (hook) otomatis diberi warna kontras agar eye-catching.</div>
+
+          <label class="field-label">Font subtitle (10 font populer TikTok / Shorts)</label>
+          <select id="sel-font" class="input">
+            <option value="poppins">Poppins ExtraBold - standar TikTok (rekomendasi)</option>
+            <option value="montserrat">Montserrat Bold - bersih &amp; modern</option>
+            <option value="bebas">Bebas Neue - poster kapital</option>
+            <option value="anton">Anton - tebal &amp; tegas</option>
+            <option value="archivo">Archivo Black - blok tebal</option>
+            <option value="barlow">Barlow Condensed Bold - ramping tinggi</option>
+            <option value="luckiest">Luckiest Guy - lucu kartun</option>
+            <option value="bangers">Bangers - gaya komik</option>
+            <option value="titan">Titan One - bulat gemuk</option>
+            <option value="lilita">Lilita One - playful tebal</option>
+          </select>
+
+          <label class="field-label">Efek cinematik</label>
+          <div class="seg" id="seg-effect">
+            <button data-v="none" class="active">Tanpa Efek</button>
+            <button data-v="classic">Cinematic</button>
+            <button data-v="dramatis">Dramatis</button>
+            <button data-v="vintage">Vintage</button>
+            <button data-v="zoom">Zoom In</button>
+            <button data-v="mono">Hitam Putih</button>
+          </div>
+          <div class="hint">Cinematic: tone teal &amp; orange + bar hitam layar bioskop. Dramatis: kontras + vignette + grain film. Vintage: warna pudar retro. Zoom In: perlahan zoom masuk. Hitam Putih: sinema B&amp;W.</div>
+
           <label class="field-label">Bahasa ucapan di video</label>
           <div class="seg" id="seg-lang">
             <button data-v="indonesian" class="active">Indonesia</button>

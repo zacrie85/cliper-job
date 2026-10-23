@@ -200,3 +200,29 @@ input[type="range"] { flex: 1; accent-color: var(--accent); }
   padding: 8px 22px; font-size: 11.5px; color: var(--muted);
   background: rgba(17, 21, 39, .7);
 }
+
+/* ---------- v1.5.0: Warna subtitle & swatch ---------- */
+.input-color {
+  width: 46px; height: 34px; padding: 2px 3px; flex: 0 0 auto;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg2); cursor: pointer;
+}
+.swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.swatch {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .28); cursor: pointer;
+  padding: 0; transition: transform .12s ease;
+}
+.swatch:hover { transform: scale(1.18); }
+
+/* ---------- v1.5.0: Dropdown font subtitle ---------- */
+select.input {
+  appearance: none; -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #9aa5cf 50%),
+    linear-gradient(135deg, #9aa5cf 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+select.input option { background: var(--bg2); color: var(--text); }
