@@ -1,13 +1,14 @@
 {
   "name": "cliper-job",
   "productName": "CLIPER JOB",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "AI Auto Clipper 100% OFFLINE - potong video panjang menjadi klip viral TikTok/Shorts/Reels dengan subtitle karaoke animasi, tanpa API key",
   "main": "main.js",
   "author": "zacrie85",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
+    "prebuild": "bash scripts/ensure-winsharp.sh",
     "dist": "electron-builder --win nsis --x64"
   },
   "dependencies": {

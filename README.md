@@ -121,6 +121,10 @@ MIT — lihat [LICENSE](LICENSE).
 
 ## Riwayat Versi
 
+### v1.6.1 — FIX aplikasi gagal buka: "Could not load the sharp module using the win32-x64 runtime"
+- **FIX KRITIS**: installer v1.6.0 kehilangan binary sharp Windows (`@img/sharp-win32-x64`) — npm di Linux otomatis melewati package ber-tag OS Windows saat instalasi, sehingga aplikasi gagal memuat library AI lokal (transformers.js) di PC Windows. Kini ada langkah build `scripts/ensure-winsharp.sh` yang memastikan binary sharp Windows selalu ada sebelum build (download tarball resmi npm registry, cek binding `.node` + `libvips-42.dll`).
+- Tanpa perubahan fitur — semua fitur v1.6.0 tetap sama.
+
 ### v1.6.0 — Face Tracking + Style Subtitle + BGM + Lebih Cepat
 - **🎯 FACE TRACKING (crop ikut pembicara)** — fitur yang paling diminta! Kini crop 9:16 otomatis MENGIKUTI orang yang sedang bicara (model AI YOLOS-tiny lokal ± 27 MB). Cocok untuk podcast 2+ orang: saat pembicara berganti, crop panning mulus ke dia. Ada toggle on/off; fallback aman ke crop tengah bila tak ada orang terdeteksi.
 - **📝 Subtitle lebih banyak style** — ukuran (Kecil/Normal/Besar) + outline (Tipis/Normal/Tebal/Kotak Hitam semi-transparan), digabung 10 font & warna bebas.
